@@ -1,0 +1,3 @@
+simple command
+binary1 one ; binary2 1 two
+binary1 one ; binary2 1 two ; binary3 1 2 three

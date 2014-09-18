@@ -1,0 +1,13 @@
+Job  1 : "echo"  ["Hello] [World"]
+Job  2 : "/bin/date" 
+Job  3 : "/bin/pwd" 
+Job  4 : "/bin/ls"  [tests] [..]
+Job  5x: "history"
+Job  6 : "/bin/pwd" 
+Job  7 : "ls"  [..]
+Job  8*: "sleep"  [5]
+Job  9*: "/bin/sleep"  [3]
+-------------------------------
+Total number of jobs               = 8
+Total number of jobs in history    = 9
+Total number of jobs in background = 2

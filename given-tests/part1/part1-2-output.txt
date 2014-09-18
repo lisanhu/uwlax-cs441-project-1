@@ -1,0 +1,13 @@
+mysh$ Job  1 : "/bin/date" 
+mysh$ Job  2 : "/bin/pwd" 
+mysh$ Job  3 : "/bin/ls"  [tests] [..]
+mysh$ Job  4x: "history"
+mysh$ Job  5 : "/bin/pwd" 
+Job  6 : "ls"  [..]
+mysh$ Job  7*: "sleep"  [5]
+Job  8*: "/bin/sleep"  [3]
+mysh$ 
+-------------------------------
+Total number of jobs               = 7
+Total number of jobs in history    = 8
+Total number of jobs in background = 2

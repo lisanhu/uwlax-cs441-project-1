@@ -1,0 +1,9 @@
+simple command &
+binary1 one & binary2 1 two &
+jobs
+binary3 one & binary4 1 two & binary5 1 2 three &
+jobs
+binary13 one & binary14 1 two & binary15 1 2 three &
+jobs
+binary23 one & binary24 1 two &
+jobs

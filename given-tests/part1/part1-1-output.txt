@@ -1,0 +1,6 @@
+mysh$ Job  1 : "echo"  ["Hello] [World"]
+mysh$ 
+-------------------------------
+Total number of jobs               = 1
+Total number of jobs in history    = 1
+Total number of jobs in background = 0
