@@ -1,0 +1,8 @@
+Job  1: "date" 
+Job  2: "pwd" 
+Job  3: "ls"  [tests]
+
+-------------------------------
+Total number of jobs               = 3
+Total number of jobs in history    = 3
+Total number of jobs in background = 0

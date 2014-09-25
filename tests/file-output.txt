@@ -1,0 +1,13 @@
+Job  1: "/bin/date" 
+Job  2: "/bin/pwd" 
+Job  3: "/bin/ls"  [tests] [..]
+Job  4x: "history" 
+Job  5x: "/bin/pwd" 
+Job  6x: "ls"  [..]
+Job  7*: "sleep"  [5]
+Job  8*: "/bin/sleep"  [3]
+
+-------------------------------
+Total number of jobs               = 7
+Total number of jobs in history    = 8
+Total number of jobs in background = 2
