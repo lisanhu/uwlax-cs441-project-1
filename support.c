@@ -1,8 +1,8 @@
 /*
- * Josh Hursey
+ * Sanhu Li
  *
  * CS441/541: Project 1 Part 1
- *
+ * Sep. 25, 2014
  */
 
 #include "support.h"

@@ -1,8 +1,8 @@
 /*
- * Josh Hursey
+ * Sanhu Li
  *
  * CS441/541: Project 1 Part 1
- *
+ * Sep. 25, 2014
  */
 #include "mysh.h"
 
@@ -89,6 +89,10 @@ int interactive_mode() {
             if (is_built_in(loc_jobs[i].argv[0])) {
                 symbol = 'x';
                 num_built_in++;
+
+                if (!strcmp(loc_jobs[i].argv[0], "exit")) {
+                    shut_down(loc_jobs, num_jobs - num_built_in, num_jobs, num_background);
+                }
             }
             printf(template, i + 1, symbol);
             fflush(NULL);
@@ -102,12 +106,13 @@ int interactive_mode() {
             }
             printf("\n");
             fflush(NULL);
+            symbol = ' ';
         }
         last = num_jobs;
 
         print_line_indicator();
     }
-
+    printf("\n");
     print_statistics(num_jobs - num_built_in, num_jobs, num_background);
 
     clean_jobs(loc_jobs, num_jobs);
@@ -170,13 +175,14 @@ int batch_mode(int argc, char **argv) {
                 }
                 printf("\n");
                 fflush(NULL);
+                symbol = ' ';
             }
             last = num_jobs;
         }
 
         fclose(fd);
     }
-
+    printf("\n");
     print_statistics(num_jobs - num_built_in, num_jobs, num_background);
 
     clean_jobs(loc_jobs, num_jobs);
@@ -185,7 +191,7 @@ int batch_mode(int argc, char **argv) {
 }
 
 void print_statistics(int num_jobs, int num_history, int num_background) {
-    printf("\n-------------------------------\n");
+    printf("-------------------------------\n");
     printf("Total number of jobs               = %d\n", num_jobs);
     printf("Total number of jobs in history    = %d\n", num_history);
     printf("Total number of jobs in background = %d\n", num_background);
@@ -204,4 +210,10 @@ bool is_built_in(char *command) {
     }
 
     return false;
+}
+
+void shut_down(job_t *loc_jobs, int num_jobs, int num_history, int num_background) {
+    print_statistics(num_jobs, num_history, num_background);
+    clean_jobs(loc_jobs, num_history);
+    exit(0);
 }
