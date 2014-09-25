@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 /******************************
  * Defines
@@ -22,10 +23,17 @@
 /******************************
  * Structures
  ******************************/
+enum job_run_t {
+    FOREGROUND,
+    BACKGROUND
+};
+typedef enum job_run_t job_run_t;
+
 struct job_t {
     char * full_command;
     int argc;
     char **argv;
+    job_run_t run_type;
 };
 typedef struct job_t job_t;
 
@@ -57,5 +65,7 @@ int split_input_into_jobs(char *input_str, int *num_jobs, job_t **loc_jobs);
  * Return 0 on success, ow error
  */
 int split_job_into_args(job_t *loc_job);
+
+char * trim(const char * ori, char * out);
 
 #endif /* SUPPORT_H */
