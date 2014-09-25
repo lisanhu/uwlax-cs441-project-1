@@ -26,6 +26,10 @@ How to run:
 To run the program from the command line simply execute the following command.
 You may optionally pass arguments to the command.
 ./mysh
+The command about indicate the interactive mode for the shell
+For batch mode
+./mysh <input file path> <...>
+You can input several file names at the same time.
 
 Example(s):
 -------------------------------
@@ -73,5 +77,26 @@ Total number of jobs in history
 Total number of jobs in background = 2
 
 -------------------------------
+
+
+
+
+How to test:
+-------------------------------
+-------------------------------
+To use the built-in test:
+make check-part1
+To use the customed test:
+make mycheck-mypart1
+
+
 Known bugs & limitations:
 -------------------------
+Only implement one built-in function: exit
+Our shell cannot run programs right now
+Need to implement more built-in function: jobs, history
+
+If you find any bug, please report to li.sanh@uwlax.edu or zhang.huif@uwlax.edu
+
+
+
