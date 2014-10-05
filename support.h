@@ -15,8 +15,8 @@
 /******************************
  * Defines
  ******************************/
-#define TRUE  0
-#define FALSE 1
+#define TRUE  1
+#define FALSE 0
 
 #define MAX_COMMAND_LINE 1024
 
@@ -49,10 +49,15 @@ typedef struct job_t job_t;
 /*
  * Split the input string into an array of job_t's
  * Jobs are separated by ';' or '&' characters
+ *
+ * Parameters:
  *   input_str : String read from the input stream (may contain multiple jobs)
- *   num_jobs : Number of jobs in the input stream
- *   loc_jobs : Array of job_t's each representing a single job
- * Return 0 on success, ow error
+ *   num_jobs  : Number of jobs in the input stream (passed-by-reference)
+ *   loc_jobs  : Array of job_t's each representing a single job (passed-by-reference)
+ *
+ * Returns:
+ *   0 on success
+ *   Negative value on error
  */
 int split_input_into_jobs(char *input_str, int *num_jobs, job_t **loc_jobs);
 
@@ -61,8 +66,13 @@ int split_input_into_jobs(char *input_str, int *num_jobs, job_t **loc_jobs);
  * a set of arguments. Arguments are separated by one or more
  * ' ' characters. Upon return the 'argc' and 'argv' fields
  * of the job_t structure are updated appropriately.
+ *
+ * Parameters:
  *   loc_job : job_t structure to process
- * Return 0 on success, ow error
+ *
+ * Returns:
+ *   0 on success
+ *   Negative value on error
  */
 int split_job_into_args(job_t *loc_job);
 

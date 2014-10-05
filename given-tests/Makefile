@@ -94,8 +94,10 @@ part1-level9:
 ###############################################
 # Tests - Part 2
 ###############################################
-check-part2: mysh
-	@echo "Not ready yet..."
+check-part2: mysh check-part2-levels
+
+#check-part2: mysh
+#	@echo "Not ready yet..."
 
 check-part2-levels: part2-level01 part2-level02 part2-level03 part2-level04 part2-level05 part2-level06 part2-level07 part2-level08 part2-level09 part2-level10 part2-level11 part2-level12 part2-level13
 
