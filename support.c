@@ -1,8 +1,13 @@
+/**
+* Author: Sanhu Li
+* Date: Oct. 5, 2014
+*/
+
 #include "support.h"
 
 char *trim(const char *src) {
     int length = strlen(src), i;
-    char *result = (char *) malloc((length + 1) * sizeof(char));
+    char *result = (char *) malloc(sizeof(char) * BLOCK_SIZE * ((length + 1) / BLOCK_SIZE + 1));
 
     for (i = 0; i < length; ++i) {
         if (!isspace(src[i])) {
@@ -13,7 +18,7 @@ char *trim(const char *src) {
     strcpy(result, src + i);
     length = strlen(result);
 
-    for (i = length - 1; i >= 0 ; --i) {
+    for (i = length - 1; i >= 0; --i) {
         if (isspace(result[i])) {
             result[i] = '\0';
         } else {
@@ -24,25 +29,24 @@ char *trim(const char *src) {
     return result;
 }
 
-int split_input_into_jobs(char *input_str, int *num_jobs, job_t **p_jobs, run_t **p_rtypes)
-{
-    char * str_ptr  = NULL;
+int split_input_into_jobs(char *input_str, int *num_jobs, job_t **p_jobs, run_t **p_rtypes) {
+    char *str_ptr = NULL;
     char command[MAX_COMMAND_LINE];
     int len;
 
     strcpy(command, input_str);
 
     /* Split by ';' and '&' */
-    for( str_ptr = strtok(input_str, "&;");
-         NULL   != str_ptr;
-         str_ptr = strtok(NULL, "&;") ) {
+    for (str_ptr = strtok(input_str, "&;");
+         NULL != str_ptr;
+         str_ptr = strtok(NULL, "&;")) {
 
         /*
          * Make a place for the new job in the local p_jobs array
          */
-        (*p_jobs) = (job_t *) realloc(*p_jobs, sizeof(job_t) * (*num_jobs + 1));
-        (*p_rtypes) = (run_t *) realloc(*p_rtypes, sizeof(run_t) * (*num_jobs + 1));
-        if( NULL == (*p_jobs)) {
+        (*p_jobs) = (job_t *) realloc(*p_jobs, sizeof(job_t) * BLOCK_SIZE * ((*num_jobs + 1) / BLOCK_SIZE + 1));
+        (*p_rtypes) = (run_t *) realloc(*p_rtypes, sizeof(run_t) * BLOCK_SIZE * ((*num_jobs + 1) / BLOCK_SIZE + 1));
+        if (NULL == (*p_jobs)) {
             fprintf(stderr, "Error: Failed to allocate memory! Critical failure on %d!", __LINE__);
             exit(-1);
         }
@@ -68,42 +72,34 @@ int split_input_into_jobs(char *input_str, int *num_jobs, job_t **p_jobs, run_t 
     return 0;
 }
 
-int split_job_into_args(job_t *job)
-{
-    char * str_ptr  = NULL, * command = strdup(job->full_command);
+int split_job_into_args(job_t *job) {
+    char *str_ptr = NULL, *command = strdup(job->full_command);
 
     /* Start counting at 0 */
     job->argc = 0;
 
     /* Split by ' ' */
-    for( str_ptr = strtok(command, " \n\t");
-         NULL   != str_ptr;
-         str_ptr = strtok(NULL, " \n\t") ) {
+    for (str_ptr = strtok(command, " \n\t");
+         NULL != str_ptr;
+         str_ptr = strtok(NULL, " \n\t")) {
 
         /*
          * Make a place for the new argument in the argv array
          * +1 for NULL termination in the sizeof calculation below (for execvp)
          */
         job->argc++;
-        job->argv = (char **)realloc(job->argv, (sizeof(char*) * ((job->argc)+1)));
-        if( NULL == job->argv ) {
+        job->argv = (char **) realloc(job->argv, (sizeof(char *) * BLOCK_SIZE * (((job->argc) + 1) / BLOCK_SIZE + 1)));
+        if (NULL == job->argv) {
             fprintf(stderr, "Error: Failed to allocate memory! Critical failure on %d!", __LINE__);
             exit(-1);
         }
 
         /* Copy over the argument */
-        job->argv[(job->argc)-1] = strdup(str_ptr);
-        job->argv[job->argc]     = NULL;
+        job->argv[(job->argc) - 1] = strdup(str_ptr);
+        job->argv[job->argc] = NULL;
     }
 
     free(command);
 
     return 0;
 }
-
-//void safe_free(void **ptr) {
-//    if (NULL != *ptr) {
-//        free(*ptr);
-//        *ptr = NULL;
-//    }
-//}

@@ -1,7 +1,7 @@
-//
-// Created by Sanhu Li on 14-10-3.
-// Copyright (c) 2014 lsh. All rights reserved.
-//
+/**
+* Author: Sanhu Li
+* Date: Oct. 5, 2014
+*/
 
 
 #ifndef __main_H_
@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <semaphore.h>
+#include "sys/wait.h"
 #include "support.h"
 
 #define MAX_LINE 1024

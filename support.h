@@ -1,7 +1,7 @@
-//
-// Created by Sanhu Li on 14-10-3.
-// Copyright (c) 2014 lsh. All rights reserved.
-//
+/**
+* Author: Sanhu Li
+* Date: Oct. 5, 2014
+*/
 
 
 #ifndef __support_H_
@@ -14,6 +14,7 @@
 #include "stdio.h"
 
 #define MAX_COMMAND_LINE 1024
+#define BLOCK_SIZE 1024
 
 typedef enum run_t {
     BACK,

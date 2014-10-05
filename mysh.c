@@ -1,20 +1,17 @@
-//
-//  main.c
-//  MyShell
-//
-//  Created by Sanhu Li on 14-10-3.
-//  Copyright (c) 2014 lsh. All rights reserved.
-//
+/**
+* Author: Sanhu Li
+* Date: Oct. 5, 2014
+*/
 
 #include "mysh.h"
 
 int main(int argc, const char *argv[]) {
 
-    jobs = (job_t *) malloc(sizeof(job_t) * 1024);
-    run_types = (run_t *) malloc(sizeof(run_t) * 1024);
-    pids = (int *) malloc(sizeof(int) * 1024);
-    states = (job_s_t *) malloc(sizeof(job_s_t) * 1024);
-    jids = (int *) malloc(sizeof(int) * 1024);
+    jobs = (job_t *) malloc(sizeof(job_t) * BLOCK_SIZE);
+    run_types = (run_t *) malloc(sizeof(run_t) * BLOCK_SIZE);
+    pids = (int *) malloc(sizeof(int) * BLOCK_SIZE);
+    states = (job_s_t *) malloc(sizeof(job_s_t) * BLOCK_SIZE);
+    jids = (int *) malloc(sizeof(int) * BLOCK_SIZE);
 
     if (argc > 1) {
         batch_mode(argc, argv);
@@ -97,8 +94,8 @@ int process_line(FILE *stream) {
 void my_process(job_t job, run_t run_type, int jid) {
     int pid;
 
-    pids = (int *) realloc(pids, (p_num + 1) * sizeof(int));
-    states = (job_s_t *) realloc(states, (p_num + 1) * sizeof(job_s_t));
+    pids = (int *) realloc(pids, sizeof(int) * BLOCK_SIZE * ((p_num + 1) / BLOCK_SIZE + 1));
+    states = (job_s_t *) realloc(states, sizeof(job_s_t) * BLOCK_SIZE * ((p_num + 1) / BLOCK_SIZE + 1));
     jids[p_num] = jid;
 
     pid = fork();
@@ -106,14 +103,12 @@ void my_process(job_t job, run_t run_type, int jid) {
         fprintf(stderr, "Failed to process job because unable to fork.\n");
         fprintf(stderr, "Job: %s", job.argv[0]);
     } else if (0 == pid) {
-        //  todo In child
         execvp(job.argv[0], job.argv);
 
         //  This should not be reached if doing well.
         fprintf(stderr, "Error processing job:\n");
         fprintf(stderr, "\t%s\n", job.full_command);
     } else {
-        //  todo In parent
         pids[p_num] = pid;
         states[p_num++] = RUNNING;
         if (FORE == run_type) {
@@ -184,11 +179,11 @@ void my_exit() {
 //        }
 //        safe_free(&(jobs[i].full_command));
 //    }
-    free(jobs);
-    free(run_types);
-    free(pids);
-    free(states);
-    free(jids);
+//    free(jobs);
+//    free(run_types);
+//    free(pids);
+//    free(states);
+//    free(jids);
     exit(0);
 }
 
