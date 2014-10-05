@@ -9,11 +9,12 @@
 #include "mysh.h"
 
 int main(int argc, const char *argv[]) {
-    jobs = (job_t *) malloc(sizeof(job_t));
-    run_types = (run_t *) malloc(sizeof(run_t));
-    pids = (int *) malloc(sizeof(int));
-    states = (job_s_t *) malloc(sizeof(job_s_t));
-    jids = (int *) malloc(sizeof(int));
+
+    jobs = (job_t *) malloc(sizeof(job_t) * 1024);
+    run_types = (run_t *) malloc(sizeof(run_t) * 1024);
+    pids = (int *) malloc(sizeof(int) * 1024);
+    states = (job_s_t *) malloc(sizeof(job_s_t) * 1024);
+    jids = (int *) malloc(sizeof(int) * 1024);
 
     if (argc > 1) {
         batch_mode(argc, argv);
