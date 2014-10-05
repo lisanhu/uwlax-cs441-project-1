@@ -1,81 +1,44 @@
-/*
- * Sanhu Li
- *
- * CS441/541: Project 1 Part 1
- * Sep. 25, 2014
- */
-#ifndef SUPPORT_H
-#define SUPPORT_H
+//
+// Created by Sanhu Li on 14-10-3.
+// Copyright (c) 2014 lsh. All rights reserved.
+//
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
+#ifndef __support_H_
+#define __support_H_
+
+#import <string.h>
 #include <ctype.h>
-
-/******************************
- * Defines
- ******************************/
-#define TRUE  1
-#define FALSE 0
+#import <stdlib.h>
+#include <stdbool.h>
+#include "stdio.h"
 
 #define MAX_COMMAND_LINE 1024
 
-/******************************
- * Structures
- ******************************/
-enum job_run_t {
-    FOREGROUND,
-    BACKGROUND
-};
-typedef enum job_run_t job_run_t;
+typedef enum run_t {
+    BACK,
+    FORE
+} run_t;
 
-struct job_t {
+typedef struct job_t {
     char * full_command;
     int argc;
-    char **argv;
-    job_run_t run_type;
-};
-typedef struct job_t job_t;
+    char ** argv;
+} job_t;
 
+typedef struct treeset {
+    int val;
+    struct treeset *left;
+    struct treeset *right;
+} treeset;
 
-/******************************
- * Global Variables
- ******************************/
+char * trim(const char * src);
 
+job_t * delete(job_t * src, int length, int index);
 
-/******************************
- * Function declarations
- ******************************/
-/*
- * Split the input string into an array of job_t's
- * Jobs are separated by ';' or '&' characters
- *
- * Parameters:
- *   input_str : String read from the input stream (may contain multiple jobs)
- *   num_jobs  : Number of jobs in the input stream (passed-by-reference)
- *   loc_jobs  : Array of job_t's each representing a single job (passed-by-reference)
- *
- * Returns:
- *   0 on success
- *   Negative value on error
- */
-int split_input_into_jobs(char *input_str, int *num_jobs, job_t **loc_jobs);
+job_t * jobcpy(job_t * dest, int dest_start, job_t * src, int src_start, int length);
 
-/*
- * Split the 'full_command' string in the job_t structure into
- * a set of arguments. Arguments are separated by one or more
- * ' ' characters. Upon return the 'argc' and 'argv' fields
- * of the job_t structure are updated appropriately.
- *
- * Parameters:
- *   loc_job : job_t structure to process
- *
- * Returns:
- *   0 on success
- *   Negative value on error
- */
-int split_job_into_args(job_t *loc_job);
+int split_input_into_jobs(char *input_str, int *num_jobs, job_t **jobs, run_t **p_rtypes);
+int split_job_into_args(job_t *job);
 
-char * trim(const char * ori, char * out);
-
-#endif /* SUPPORT_H */
+#endif //__support_H_

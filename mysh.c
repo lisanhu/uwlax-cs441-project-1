@@ -1,219 +1,227 @@
-/*
- * Sanhu Li
- *
- * CS441/541: Project 1 Part 1
- * Sep. 25, 2014
- */
+//
+//  main.c
+//  MyShell
+//
+//  Created by Sanhu Li on 14-10-3.
+//  Copyright (c) 2014 lsh. All rights reserved.
+//
+
 #include "mysh.h"
 
-int main(int argc, char * argv[]) {
+int main(int argc, const char *argv[]) {
+    jobs = (job_t *) malloc(sizeof(job_t));
+    run_types = (run_t *) malloc(sizeof(run_t));
+    pids = (int *) malloc(sizeof(int));
+    states = (job_s_t *) malloc(sizeof(job_s_t));
+    jids = (int *) malloc(sizeof(int));
 
     if (argc > 1) {
         batch_mode(argc, argv);
-    } else if (argc == 1) {
-        interactive_mode();
+    } else {
+        inter_mode();
     }
 
     return 0;
 }
 
-void print_line_indicator() {
+void print_indicator() {
     printf("mysh$ ");
-    fflush(NULL);
+    fflush(stdout);
 }
 
-void clean_jobs(job_t * loc_jobs, int num_jobs) {
-    int i, j;
-    if( NULL != loc_jobs ) {
-        /* Cleanup struct fields */
-        for( i = 0; i < num_jobs; ++i ) {
-            /* .full_command */
-            if( NULL != loc_jobs[i].full_command ) {
-                free( loc_jobs[i].full_command );
-                loc_jobs[i].full_command = NULL;
-            }
-
-            /* .argv */
-            if( NULL != loc_jobs[i].argv ) {
-                for( j = 0; j < loc_jobs[i].argc; ++j ) {
-                    if( NULL != loc_jobs[i].argv[j] ) {
-                        free( loc_jobs[i].argv[j] );
-                        loc_jobs[i].argv[j] = NULL;
-                    }
-                }
-                free( loc_jobs[i].argv );
-                loc_jobs[i].argv = NULL;
-            }
-
-            /* .argc */
-            loc_jobs[i].argc = 0;
-        }
-
-        /* Free the array */
-        free(loc_jobs);
-    }
-}
-
-int interactive_mode() {
-    char line[MAX_COMMAND_LINE + 1];
-    int num_jobs = 0, last = 0, num_built_in = 0, num_background = 0;
-    job_t * loc_jobs = NULL;
-    int i, j;
-    char *template, symbol = ' ';
-
-    loc_jobs = (job_t*)malloc(sizeof(job_t) * 1);
-    if( NULL == loc_jobs ) {
-        fprintf(stderr, "Error: Failed to allocate memory! Critical failure on %d!", __LINE__);
-        exit(-1);
+bool is_builtin(const char *command) {
+    if (!strcmp("exit", command)) {
+        return true;
     }
 
-    print_line_indicator();
-    while (fgets(line, MAX_COMMAND_LINE, stdin) != NULL) {
-        trim(line, line);
-        if (!strcmp("", line)) {
-            print_line_indicator();
-            continue;
-        }
-
-        split_input_into_jobs(line, &num_jobs, &loc_jobs);
-
-        for (i = last; i < num_jobs; ++i) {
-            split_job_into_args( &(loc_jobs[i]) );
-
-            template = "Job  %d%c: ";
-            if (BACKGROUND == loc_jobs[i].run_type) {
-                symbol = '*';
-                num_background++;
-            }
-
-            if (is_built_in(loc_jobs[i].argv[0])) {
-                symbol = 'x';
-                num_built_in++;
-
-                if (!strcmp(loc_jobs[i].argv[0], "exit")) {
-                    shut_down(loc_jobs, num_jobs - num_built_in, num_jobs, num_background);
-                }
-            }
-            printf(template, i + 1, symbol);
-            fflush(NULL);
-            for( j = 0; j < loc_jobs[i].argc; ++j ) {
-                if (0 == j) {
-                    printf("\"%s\" ", loc_jobs[i].argv[j]);
-                } else {
-                    printf(" [%s]", loc_jobs[i].argv[j]);
-                    fflush(NULL);
-                }
-            }
-            printf("\n");
-            fflush(NULL);
-            symbol = ' ';
-        }
-        last = num_jobs;
-
-        print_line_indicator();
-    }
-    printf("\n");
-    print_statistics(num_jobs - num_built_in, num_jobs, num_background);
-
-    clean_jobs(loc_jobs, num_jobs);
-    loc_jobs = NULL;
-
-    return 0;
-}
-
-int batch_mode(int argc, char **argv) {
-    char line[MAX_COMMAND_LINE + 1];
-    int num_jobs = 0, last = 0, num_built_in = 0, num_background = 0;
-    job_t * loc_jobs = NULL;
-    FILE *fd;
-    int i, j;
-    char *template, symbol;
-
-    loc_jobs = (job_t*)malloc(sizeof(job_t) * 1);
-    if( NULL == loc_jobs ) {
-        fprintf(stderr, "Error: Failed to allocate memory! Critical failure on %d!", __LINE__);
-        exit(-1);
+    if (!strcmp("jobs", command)) {
+        return true;
     }
 
-    for (i = 1; i < argc; i++) {
-        fd = fopen(argv[i], "r");
-        if (NULL == fd) {
-            fprintf(stderr, "Error: Failed to open file %s! Critical failure on %d!", argv[i], __LINE__);
-            exit(-1);
-        }
-
-        while (fgets(line, MAX_COMMAND_LINE, fd) != NULL) {
-            trim(line, line);
-            if (!strcmp("", line)) {
-                continue;
-            }
-
-            split_input_into_jobs(line, &num_jobs, &loc_jobs);
-
-            for (i = last; i < num_jobs; ++i) {
-                split_job_into_args( &(loc_jobs[i]) );
-
-                template = "Job  %d%c: ";
-                if (BACKGROUND == loc_jobs[i].run_type) {
-                    symbol = '*';
-                    num_background++;
-                }
-
-                if (is_built_in(loc_jobs[i].argv[0])) {
-                    symbol = 'x';
-                    num_built_in++;
-                }
-                printf(template, i + 1, symbol);
-                fflush(NULL);
-                for( j = 0; j < loc_jobs[i].argc; ++j ) {
-                    if (0 == j) {
-                        printf("\"%s\" ", loc_jobs[i].argv[j]);
-                    } else {
-                        printf(" [%s]", loc_jobs[i].argv[j]);
-                        fflush(NULL);
-                    }
-                }
-                printf("\n");
-                fflush(NULL);
-                symbol = ' ';
-            }
-            last = num_jobs;
-        }
-
-        fclose(fd);
-    }
-    printf("\n");
-    print_statistics(num_jobs - num_built_in, num_jobs, num_background);
-
-    clean_jobs(loc_jobs, num_jobs);
-
-    return 0;
-}
-
-void print_statistics(int num_jobs, int num_history, int num_background) {
-    printf("-------------------------------\n");
-    printf("Total number of jobs               = %d\n", num_jobs);
-    printf("Total number of jobs in history    = %d\n", num_history);
-    printf("Total number of jobs in background = %d\n", num_background);
-}
-
-bool is_built_in(char *command) {
-    char buf[MAX_COMMAND_LINE];
-    int i;
-
-    trim(command, buf);
-
-    for (i = 0; i < NUM_BUILT_IN; ++i) {
-        if (!strcmp(built_ins[i], buf)) {
-            return true;
-        }
+    if (!strcmp("history", command)) {
+        return true;
     }
 
     return false;
 }
 
-void shut_down(job_t *loc_jobs, int num_jobs, int num_history, int num_background) {
-    print_statistics(num_jobs, num_history, num_background);
-    clean_jobs(loc_jobs, num_history);
+void process_builtin(const char *command) {
+    if (!strcmp("exit", command)) {
+        my_exit();
+    }
+
+    if (!strcmp("jobs", command)) {
+        my_jobs();
+    }
+
+    if (!strcmp("history", command)) {
+        my_history();
+    }
+}
+
+int process_line(FILE *stream) {
+    char line[MAX_LINE], *result;
+    int last, i;
+
+    last = num_jobs;
+    result = fgets(line, MAX_LINE, stream);
+
+    if (NULL == result) {
+        return -1;
+    }
+
+    result = trim(line);
+    strcpy(line, result);
+    free(result);
+
+    if (!strcmp("", line)) {
+        return 0;
+    }
+
+    split_input_into_jobs(line, &num_jobs, &jobs, &run_types);
+
+    for (i = last; i < num_jobs; ++i) {
+        split_job_into_args(&jobs[i]);
+
+        if (is_builtin(jobs[i].argv[0])) {
+            process_builtin(jobs[i].argv[0]);
+        } else {
+            my_process(jobs[i], run_types[i], i);
+        }
+    }
+
+    return 0;
+}
+
+void my_process(job_t job, run_t run_type, int jid) {
+    int pid;
+
+    pids = (int *) realloc(pids, (p_num + 1) * sizeof(int));
+    states = (job_s_t *) realloc(states, (p_num + 1) * sizeof(job_s_t));
+    jids[p_num] = jid;
+
+    pid = fork();
+    if (-1 == pid) {
+        fprintf(stderr, "Failed to process job because unable to fork.\n");
+        fprintf(stderr, "Job: %s", job.argv[0]);
+    } else if (0 == pid) {
+        //  todo In child
+        execvp(job.argv[0], job.argv);
+
+        //  This should not be reached if doing well.
+        fprintf(stderr, "Error processing job:\n");
+        fprintf(stderr, "\t%s\n", job.full_command);
+    } else {
+        //  todo In parent
+        pids[p_num] = pid;
+        states[p_num++] = RUNNING;
+        if (FORE == run_type) {
+            waitpid(pid, NULL, 0);
+            states[p_num - 1] = DONE;
+        }
+    }
+}
+
+void inter_mode() {
+    print_indicator();
+    while (-1 != process_line(stdin)) {
+        print_indicator();
+    }
+
+    my_exit();
+}
+
+void batch_mode(int argc, const char *argv[]) {
+    int i;
+    FILE *fd;
+    for (i = 1; i < argc; ++i) {
+        fd = fopen(argv[i], "r");
+
+        if (NULL == fd) {
+            fprintf(stderr, "Cannot open file %s\n", argv[i]);
+            continue;
+        }
+
+        while (-1 != process_line(fd));
+        fclose(fd);
+    }
+    printf("\n");
+    my_exit();
+}
+
+void my_exit() {
+    int num_back = 0, i, j, count = 0;
+    for (i = 0; i < num_jobs; ++i) {
+        if (BACK == run_types[i]) {
+            num_back++;
+        }
+    }
+
+    for (i = 0; i < p_num; ++i) {
+        if (states[i] == RUNNING) {
+            count++;
+        }
+    }
+
+
+    printf("-------------------------------\n");
+    printf("Total number of jobs               = %d\n", p_num);
+    printf("Total number of jobs in history    = %d\n", num_jobs);
+    printf("Total number of jobs in background = %d\n", num_back);
+
+    if (count > 0) {
+        printf("\nPlease waiting for %d process(es)...", count);
+        fflush(NULL);
+
+        while (wait(NULL) > 0) ;
+    }
+    printf("\nBye\n");
+
+    for (i = 0; i < num_jobs; ++i) {
+        for (j = 0; j < jobs[i].argc; ++j) {
+            free(jobs[i].argv[j]);
+        }
+        free(jobs[i].full_command);
+    }
+    free(jobs);
+    free(run_types);
+    free(pids);
+    free(states);
+    free(jids);
     exit(0);
+}
+
+void my_jobs() {
+    int i, j;
+    char *template = "[%d]\t%s\t%s\n";
+
+    //  Before we print out the states, first check all children
+    for (i = 0; i < p_num; ++i) {
+        if (states[i] != SHOWN) {
+            j = waitpid(pids[i], NULL, WNOHANG);
+            if (0 == j || -1 == j) {
+                states[i] = RUNNING;
+            } else if (j > 0) {
+                states[i] = DONE;
+            }
+        }
+    }
+
+    for (i = 0; i < p_num; ++i) {
+        if (states[i] != SHOWN) {
+            printf(template, i + 1, RUNNING == states[i] ? "Running" : "Done", jobs[jids[i]].full_command);
+            if (DONE == states[i]) {
+                states[i] = SHOWN;
+            }
+        }
+    }
+}
+
+void my_history() {
+    int i;
+    char *template = "%4d\t%s %c\n";
+
+    for (i = 0; i < num_jobs; ++i) {
+        printf(template, i + 1, jobs[i].full_command, BACK == run_types[i] ? '&' : ' ');
+    }
 }

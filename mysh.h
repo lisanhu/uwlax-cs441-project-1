@@ -1,50 +1,44 @@
-/*
- * Sanhu Li
- *
- * CS441/541: Project 1 Part 1
- * Sep. 25, 2014
- */
-#ifndef MYSHELL_H
-#define MYSHELL_H
+//
+// Created by Sanhu Li on 14-10-3.
+// Copyright (c) 2014 lsh. All rights reserved.
+//
 
-#include "support.h"
-#include "stdbool.h"
 
-/* For fork, exec, sleep */
-#include <sys/types.h>
+#ifndef __main_H_
+#define __main_H_
+
+#include <stdio.h>
 #include <unistd.h>
-/* For waitpid */
-#include <sys/wait.h>
+#include <stdbool.h>
+#include <semaphore.h>
+#include "support.h"
 
-/******************************
- * Defines
- ******************************/
-#define NUM_BUILT_IN 3
+#define MAX_LINE 1024
+
+typedef enum job_s_t {
+    DONE, RUNNING, SHOWN
+} job_s_t;
+
+// All jobs in history, builtin jobs included
+job_t *jobs;
+// Run type for all jobs in history, FORE or BACK
+run_t *run_types;
+/*
+    num_jobs: length of all jobs in history
+    pids: hold all the pids for the child processes
+    p_num: num of child processes, also thought to be num of jobs
+    jids: corresponding job index for a certain child process
+*/
+int num_jobs, *pids, p_num, *jids;
+// states: state for child processes
+job_s_t *states;
 
 
-/******************************
- * Structures
- ******************************/
+void inter_mode();
+void batch_mode(int argc, const char *argv[]);
+void my_exit();
+void my_jobs();
+void my_history();
+void my_process(job_t job, run_t run_type, int jid);
 
-
-/******************************
- * Global Variables
- ******************************/
-char built_ins[NUM_BUILT_IN][MAX_COMMAND_LINE] = {"history", "jobs", "exit"};
-
-/******************************
- * Function declarations
- ******************************/
-int interactive_mode();
-
-int batch_mode(int argc, char ** argv);
-
-void print_statistics(int num_jobs, int num_history, int num_background);
-
-bool is_built_in(char * command);
-
-void clean_jobs(job_t * loc_jobs, int num_jobs);
-
-void shut_down(job_t * loc_jobs, int num_jobs, int num_history, int num_background);
-
-#endif /* MYSHELL_H */
+#endif //__main_H_
