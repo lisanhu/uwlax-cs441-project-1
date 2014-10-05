@@ -24,34 +24,6 @@ char *trim(const char *src) {
     return result;
 }
 
-
-job_t *jobcpy(job_t *dest, int dest_start, job_t *src, int src_start, int length) {
-    int i;
-    if (NULL == dest) {
-        dest = (job_t *) malloc(length * sizeof(job_t));
-    }
-
-    for (i = 0; i < length; ++i) {
-        dest[dest_start + i] = src[src_start + i];
-    }
-
-    return dest;
-}
-
-job_t * delete(job_t *src, int length, int index) {
-    job_t *result = NULL;
-    if (length <= index) {
-        return NULL;
-    } else if (index == length - 1) {
-        jobcpy(result, 0, src, 0, index);
-    } else {
-        result = (job_t *) malloc((length - 1) * sizeof(job_t));
-        jobcpy(result, 0, src, 0, index);
-        jobcpy(result, index, src, index + 1, length - index);
-    }
-    return result;
-}
-
 int split_input_into_jobs(char *input_str, int *num_jobs, job_t **p_jobs, run_t **p_rtypes)
 {
     char * str_ptr  = NULL;
@@ -128,3 +100,10 @@ int split_job_into_args(job_t *job)
 
     return 0;
 }
+
+//void safe_free(void **ptr) {
+//    if (NULL != *ptr) {
+//        free(*ptr);
+//        *ptr = NULL;
+//    }
+//}

@@ -81,7 +81,7 @@ int process_line(FILE *stream) {
     split_input_into_jobs(line, &num_jobs, &jobs, &run_types);
 
     for (i = last; i < num_jobs; ++i) {
-        split_job_into_args(&jobs[i]);
+        split_job_into_args(&(jobs[i]));
 
         if (is_builtin(jobs[i].argv[0])) {
             process_builtin(jobs[i].argv[0]);
@@ -150,7 +150,7 @@ void batch_mode(int argc, const char *argv[]) {
 }
 
 void my_exit() {
-    int num_back = 0, i, j, count = 0;
+    int num_back = 0, i, count = 0;
     for (i = 0; i < num_jobs; ++i) {
         if (BACK == run_types[i]) {
             num_back++;
@@ -177,12 +177,12 @@ void my_exit() {
     }
     printf("\nBye\n");
 
-    for (i = 0; i < num_jobs; ++i) {
-        for (j = 0; j < jobs[i].argc; ++j) {
-            free(jobs[i].argv[j]);
-        }
-        free(jobs[i].full_command);
-    }
+//    for (i = 0; i < num_jobs; ++i) {
+//        for (j = 0; j < jobs[i].argc; ++j) {
+//            safe_free(&(jobs[i].argv[j]));
+//        }
+//        safe_free(&(jobs[i].full_command));
+//    }
     free(jobs);
     free(run_types);
     free(pids);
@@ -199,9 +199,9 @@ void my_jobs() {
     for (i = 0; i < p_num; ++i) {
         if (states[i] != SHOWN) {
             j = waitpid(pids[i], NULL, WNOHANG);
-            if (0 == j || -1 == j) {
+            if (0 == j) {
                 states[i] = RUNNING;
-            } else if (j > 0) {
+            } else if (j > 0 || -1 == j) {
                 states[i] = DONE;
             }
         }
