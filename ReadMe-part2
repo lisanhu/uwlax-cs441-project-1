@@ -1,0 +1,138 @@
+# CS441/541
+## Project 01 - Part 2
+Author: Huifeng Zhang
+-------------------------
+Description:
+It a simple self-made shell program.
+This program is the following pro version of Projecet 01 - Part 1, in this prototype, the builtin function history and jobs are implemented, it is capable of either interactive or batch mode, which is read a file and process or process command from user input directly.
+-------------------------
+
+Tips:
+-------------------------
+-------------------------
+while process a command "exit", the program will be terminated directly if no processes are still in progress, or will display a message indicates how many processes are still running in the background, and wait until their finishing to exit the program. 
+
+While user trying to let the program process command "date", the content will different each time as it's trying to display the current time.
+-------------------------
+
+How to compile:
+-------------------------------
+-------------------------
+A Makefile is supplied with this assignment.
+To compile the application:
+   make
+
+To clean the build:
+   make clean
+-------------------------
+
+How to run:
+-------------------------------
+-------------------------
+To run the program from the command line simply execute the following command.
+You may optionally pass arguments to the command.
+./mysh
+The command above indicate the interactive mode for the shell
+
+For batch mode
+./mysh <input file path> <...>
+You can input several file names at the same time.
+-------------------------
+
+Example(s):
+-------------------------------
+-------------------------
+This example runs with a simple input command "./mysh tests/file4.txt" provided by the
+user. (notice: when user run this command, the date will be different because it displays the current time)
+-------------------------
+Sun Oct  5 19:00:26 CDT 2014
+/home/zhang.huif/myproject-1
+Sun Oct  5 19:00:26 CDT 2014
+/home/zhang.huif/myproject-1
+Sun Oct  5 19:00:26 CDT 2014
+/home/zhang.huif/myproject-1
+ls: cannot access test: No such file or directory
+..:
+cs441-f2014-project-0  myproject0  myproject-1	tmp
+given-tests  mysh    mysh.h  support.c	support.o
+Makefile     mysh.c  ReadMe  support.h	tests
+file01-output.txt  file2-output.txt  file4.txt	       file6.txt
+file02-output.txt  file2.txt	     file5-output.txt  file-output.txt
+file1-output.txt   file3.txt	     file5.txt	       file.txt
+file1.txt	   file4-output.txt  file6-output.txt  Makefile
+zhang.huif
+Sun Oct  5 19:00:26 CDT 2014
+
+
+-------------------------------
+Total number of jobs               = 11
+Total number of jobs in history    = 11
+Total number of jobs in background = 0
+-------------------------------
+
+This example runs with a simple input command "./mysh" to start the shell, provided by the
+user and input one command each time to process.
+-------------------------------
+mysh$ date
+Sun Oct  5 19:16:10 CDT 2014
+
+mysh$ /bin/pwd
+/home/zhang.huif/myproject-1
+
+mysh$ ls tests ..
+..:
+cs441-f2014-project-0  myproject0  myproject-1	tmp
+
+tests:
+file01-output.txt  file2-output.txt  file4.txt	       file6.txt
+file02-output.txt  file2.txt	     file5-output.txt  file-output.txt
+file1-output.txt   file3.txt	     file5.txt	       file.txt
+file1.txt	   file4-output.txt  file6-output.txt  Makefile
+
+mysh$ /bin/date;pwd;/bin/ls tests ..   
+Sun Oct  5 19:17:02 CDT 2014
+/home/zhang.huif/myproject-1
+..:
+cs441-f2014-project-0  myproject0  myproject-1	tmp
+
+tests:
+file01-output.txt  file2-output.txt  file4.txt	       file6.txt
+file02-output.txt  file2.txt	     file5-output.txt  file-output.txt
+file1-output.txt   file3.txt	     file5.txt	       file.txt
+file1.txt	   file4-output.txt  file6-output.txt  Makefile
+
+mysh$ /bin/date
+Sun Oct  5 19:17:09 CDT 2014
+
+mysh$ /bin/sleep 5 & sleep 4 & sleep 3 & /bin/sleep 3 &
+mysh$ jobs
+[1]	Running	/bin/sleep 5
+[2]	Running	sleep 4
+[3]	Running	sleep 3
+[4]	Running	/bin/sleep 3
+mysh$ jobs
+[1]	Done	/bin/sleep 5
+[2]	Done	sleep 4
+[3]	Done	sleep 3
+[4]	Done	/bin/sleep 3
+mysh$ jobs
+mysh$ 
+
+-------------------------
+
+How to test:
+-------------------------------
+-------------------------------
+To use the built-in test:
+make check-part2
+To use the customed test:
+make mycheck-mypart2
+-------------------------
+
+Known bugs & limitations:
+-------------------------------
+-------------------------------
+If you find any bugs, please report to li.sanh@uwlax.edu or zhang.huif@uwlax.edu
+
+
+
