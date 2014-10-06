@@ -1,0 +1,8 @@
+date
+sleep 5 & sleep 4 & sleep 3 & sleep 2 & sleep 1 & 
+jobs
+
+sleep 1 & jobs & sleep 1 & jobs & sleep 1 & jobs & sleep 1 & jobs & sleep 1 & jobs &
+date 
+jobs & jobs & jobs & jobs & jobs & jobs & jobs & 
+exit

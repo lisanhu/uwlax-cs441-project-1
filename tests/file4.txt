@@ -1,3 +1,12 @@
-date; pwd
-bin/date & bin/pwd
-sleep & & bin/sleep 3 ;      history & jobs & exit ; sleep 4 &
+date
+pwd
+date
+pwd
+date
+pwd
+ls test ..
+ls
+		ls tests
+whoami
+
+		date

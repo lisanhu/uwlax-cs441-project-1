@@ -1,0 +1,66 @@
+Sun Oct  5 19:06:00 CDT 2014
+/home/zhang.huif/myproject-1
+Sun Oct  5 19:06:00 CDT 2014
+/home/zhang.huif/myproject-1
+Sun Oct  5 19:06:00 CDT 2014
+/home/zhang.huif/myproject-1
+ls: cannot access test: No such file or directory
+..:
+cs441-f2014-project-0  myproject0  myproject-1	tmp
+given-tests  mysh    mysh.h  support.c	support.o
+Makefile     mysh.c  ReadMe  support.h	tests
+file01-output.txt  file2-output.txt  file4.txt	       file6.txt
+file02-output.txt  file2.txt	     file5-output.txt  file-output.txt
+file1-output.txt   file3.txt	     file5.txt	       file.txt
+file1.txt	   file4-output.txt  file6-output.txt  Makefile
+zhang.huif
+Sun Oct  5 19:06:00 CDT 2014
+[1]	Done	date
+[2]	Done	pwd
+[3]	Done	date
+[4]	Done	pwd
+[5]	Done	date
+[6]	Done	pwd
+[7]	Done	ls test ..
+[8]	Done	ls
+[9]	Done	ls tests
+[10]	Done	whoami
+[11]	Done	date
+[12]	Done	sleep 2
+[13]	Running	sleep 1
+[13]	Running	sleep 1
+[14]	Running	sleep 2
+[13]	Done	sleep 1
+[14]	Running	sleep 2
+[15]	Done	sleep 1
+[16]	Running	sleep 1
+[14]	Done	sleep 2
+[16]	Done	sleep 1
+[17]	Done	sleep 1
+   1	date  
+   2	pwd  
+   3	date  
+   4	pwd  
+   5	date  
+   6	pwd  
+   7	ls test ..  
+   8	ls  
+   9	ls tests  
+  10	whoami  
+  11	date  
+  12	sleep 2  
+  13	sleep 1 &
+  14	jobs  
+  15	sleep 2 &
+  16	jobs  
+  17	sleep 1  
+  18	sleep 1 &
+  19	jobs  
+  20	sleep 1  
+  21	jobs  
+  22	history  
+
+-------------------------------
+Total number of jobs               = 17
+Total number of jobs in history    = 23
+Total number of jobs in background = 3

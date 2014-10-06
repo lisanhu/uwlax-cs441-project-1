@@ -1,0 +1,24 @@
+sleep 2 ; sleep 1 &
+jobs
+
+sleep 2 &
+jobs
+
+sleep 1 ; sleep 1 &
+jobs
+
+sleep 1
+jobs
+
+history
+
+exit
+
+sleep 1
+jobs
+
+sleep 1
+jobs
+
+sleep 2 &
+jobs

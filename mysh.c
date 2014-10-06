@@ -1,5 +1,5 @@
 /**
-* Author: Sanhu Li
+* Author: Sanhu Li, Huifeng Zhang
 * Date: Oct. 5, 2014
 */
 
@@ -159,19 +159,21 @@ void my_exit() {
         }
     }
 
-
-    printf("-------------------------------\n");
-    printf("Total number of jobs               = %d\n", p_num);
-    printf("Total number of jobs in history    = %d\n", num_jobs);
-    printf("Total number of jobs in background = %d\n", num_back);
-
     if (count > 0) {
-        printf("\nPlease waiting for %d process(es)...", count);
+        //  printf("\nPlease waiting for %d process(es)...", count);
+        printf("\nWaiting on %d jobs to finish running in the background!", count);
         fflush(NULL);
 
         while (wait(NULL) > 0) ;
     }
-    printf("\nBye\n");
+  //  printf("\nAll jobs down, exit \n");
+
+    printf("\n-------------------------------\n");
+    printf("Total number of jobs               = %d\n", p_num);
+    printf("Total number of jobs in history    = %d\n", num_jobs);
+    printf("Total number of jobs in background = %d\n", num_back);
+
+
 
 //    for (i = 0; i < num_jobs; ++i) {
 //        for (j = 0; j < jobs[i].argc; ++j) {
