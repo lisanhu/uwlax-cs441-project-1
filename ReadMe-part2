@@ -1,50 +1,52 @@
-# CS441/541
-## Project 01 - Part 2
-Author: Huifeng Zhang
--------------------------
-Description:
-It a simple self-made shell program.
-This program is the following pro version of Projecet 01 - Part 1, in this prototype, the builtin function history and jobs are implemented, it is capable of either interactive or batch mode, which is read a file and process or process command from user input directly.
--------------------------
+# CS441/541 Project 01 - Part 2
 
-Tips:
--------------------------
--------------------------
-while process a command "exit", the program will be terminated directly if no processes are still in progress, or will display a message indicates how many processes are still running in the background, and wait until their finishing to exit the program. 
+---
+## Author(s) & Date: 
+Huifeng Zhang, Sanhu Li
 
-While user trying to let the program process command "date", the content will different each time as it's trying to display the current time.
--------------------------
+Oct. 5, 2014
 
-How to compile:
--------------------------------
--------------------------
-A Makefile is supplied with this assignment.
-To compile the application:
-   make
+---
+## Description:
 
-To clean the build:
-   make clean
--------------------------
+It is a simple self-made shell program.
 
-How to run:
--------------------------------
--------------------------
-To run the program from the command line simply execute the following command.
-You may optionally pass arguments to the command.
-./mysh
-The command above indicate the interactive mode for the shell
+This program is a more professional version of Projecet 01 - Part 1, in this version, the builtin function history and jobs are implemented, it is capable of either interactive or batch mode, which can read command from user input or from files.
 
-For batch mode
-./mysh <input file path> <...>
-You can input several file names at the same time.
--------------------------
+---
+## Tips:
+while processing command "exit", the program will be terminated directly if no process is still running. It will display a message indicating how many processes are still running in the background, and will wait until their finishing to exit the program. 
 
-Example(s):
--------------------------------
--------------------------
-This example runs with a simple input command "./mysh tests/file4.txt" provided by the
-user. (notice: when user run this command, the date will be different because it displays the current time)
--------------------------
+---
+## How to compile:
+A Makefile is provided in this assignment.
+To compile the application, use the command:
+
+    $ make
+
+
+To remove the application, please use:
+
+    $ make clean
+
+---
+## How to run:
+### Interactive mode:
+To run the program from the command line, simply execute the following command just as you did to the local shell before.
+
+    $ ./mysh
+
+### batch mode:
+
+    $ ./mysh [input file name] [...]
+
+You can enter several file names at the same time.
+
+---
+## Example(s):
+This example runs with a simple input command `./mysh tests/file4.txt`.(note: when user run this command, the date will be different because it displays the current time)
+
+```
 Sun Oct  5 19:00:26 CDT 2014
 /home/zhang.huif/myproject-1
 Sun Oct  5 19:00:26 CDT 2014
@@ -69,10 +71,10 @@ Total number of jobs               = 11
 Total number of jobs in history    = 11
 Total number of jobs in background = 0
 -------------------------------
+```
+This example runs with a simple input command `./mysh` to start the shell, user should input one command each time to process.
 
-This example runs with a simple input command "./mysh" to start the shell, provided by the
-user and input one command each time to process.
--------------------------------
+```
 mysh$ date
 Sun Oct  5 19:16:10 CDT 2014
 
@@ -118,21 +120,23 @@ mysh$ jobs
 mysh$ jobs
 mysh$ 
 
--------------------------
+```
+---
+## How to test:
 
-How to test:
--------------------------------
--------------------------------
 To use the built-in test:
-make check-part2
-To use the customed test:
-make mycheck-mypart2
--------------------------
 
-Known bugs & limitations:
--------------------------------
--------------------------------
-If you find any bugs, please report to li.sanh@uwlax.edu or zhang.huif@uwlax.edu
+    make check-part2
+    
+To use the customed test:
+
+    make mycheck-mypart2
+    
+---
+
+## Known bugs & limitations:
+
+If you find any bugs, please report to [li.sanh@uwlax.edu](mailto:li.sanh@uwlax.edu) or [zhang.huif@uwlax.edu](mailto:zhang.huif@uwlax.edu)
 
 
 
