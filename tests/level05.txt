@@ -1,0 +1,10 @@
+pwd ;
+date
+pwd ; pwd ;
+date
+pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ; pwd ;
+date
+pwd
+sleep 1 ; sleep 2 ; sleep 3 ; sleep 4 ;
+pwd
+date

@@ -1,0 +1,17 @@
+date
+sleep 3 ; sleep 2 ; sleep 1 ;
+sleep 1 &
+date
+
+sleep 1 &
+date
+sleep 1 &
+date
+sleep 1 &
+date
+sleep 1 &
+date
+sleep 1 &
+date
+sleep 1 &
+date

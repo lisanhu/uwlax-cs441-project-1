@@ -1,0 +1,12 @@
+date
+pwd
+ls
+ls tests
+
+ls tests ..
+
+history
+
+whoami
+
+date
